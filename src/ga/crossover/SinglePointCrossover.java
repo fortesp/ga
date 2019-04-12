@@ -13,7 +13,7 @@ public class SinglePointCrossover implements Crossover {
         float[] genesOffspring1 = new float[length];
         float[] genesOffspring2 = new float[length];
 
-        float splitPoint = GA.getRandomInt(1, length - 1);
+        float splitPoint = GA.getRandomNumber(1, length - 1);
 
         for (int i = 0; i < length; i++) {
 

@@ -5,14 +5,17 @@ import ga.GA;
 
 public class BoundaryMutation implements Mutation {
 
-
     @Override
     public void execute(Cell cell) {
 
-        float bound = (Math.random() < 0.5)?0:0.999f;
+        for (int i = 0; i < cell.getGenes().length; i++)
+            if (Math.random() <= MUTATION_PROBABILITY) {
 
-        int index = GA.getRandomInt(0, cell.getGenes().length - 1);
+                float bound = (Math.random() < 0.5) ? 0 : 0.999f;
+                int index = GA.getRandomNumber(0, cell.getGenes().length - 1);
 
-        cell.setSingleGene(index, bound);
+                cell.setSingleGene(index, bound);
+            }
     }
+
 }

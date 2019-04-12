@@ -12,8 +12,8 @@ public class TwoPointCrossover implements Crossover {
         float[] genesOffspring1 = new float[length];
         float[] genesOffspring2 = new float[length];
 
-        int splitPoint1 = GA.getRandomInt(1, length - 2);
-        int splitPoint2 = GA.getRandomInt(splitPoint1, length - 1);
+        int splitPoint1 = GA.getRandomNumber(1, length - 2);
+        int splitPoint2 = GA.getRandomNumber(splitPoint1, length - 1);
 
         for (int i = 0; i < length; i++) {
 

@@ -3,6 +3,8 @@ package ga;
 import ga.crossover.*;
 import ga.mutation.Mutation;
 import ga.mutation.UniformMutation;
+import ga.selection.ElitistSelection;
+import ga.selection.RouletteWheelSelection;
 import ga.selection.Selection;
 import ga.selection.TournamentSelection;
 
@@ -12,9 +14,6 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class GA {
-
-    final float PRESELECTION_PROBABILITY = 0.80f;
-    final float MUTATION_PROBABILITY = 0.10f;
 
     private final int totalPopulation;
 
@@ -33,7 +32,7 @@ public class GA {
         // Different types of implementations for each genetic operators
         this.selection = new TournamentSelection();
         this.crossover = new TwoPointCrossover();
-        this.mutation  = new UniformMutation();
+        this.mutation = new UniformMutation();
 
         generatePopulation();
     }
@@ -60,25 +59,16 @@ public class GA {
         cell.setFitness(score);
     }
 
-    private List<Cell> preSelection() {
-
-        int limit = Math.round(population.size() * PRESELECTION_PROBABILITY);
-
-        Collections.sort(population);
-
-        return population.subList(0, limit);
-    }
-
     final public List<Cell> evolve() {
 
         List<Cell> newPopulation = new ArrayList<Cell>();
 
         // Pre selection/selection of the population (survival of the fittest)
-        population = preSelection();
+        //population = preSelection();
 
-        while(newPopulation.size() < this.totalPopulation) {
+        while (newPopulation.size() < this.totalPopulation) {
 
-            // Mating selection
+            // Mating, selection
             Cell[] parents = selection.execute(population);
 
             Cell c1 = parents[0];
@@ -88,11 +78,8 @@ public class GA {
             Cell[] offspring = crossover.execute(c1, c2);
 
             // Offspring mutation
-            if(Math.random() < MUTATION_PROBABILITY)
-                mutation.execute(offspring[0]);
-
-            if(Math.random() < MUTATION_PROBABILITY)
-                mutation.execute(offspring[1]);
+            mutation.execute(offspring[0]);
+            mutation.execute(offspring[1]);
 
             calculateFitness(offspring[0]);
             calculateFitness(offspring[1]);
@@ -104,14 +91,14 @@ public class GA {
 
         population = newPopulation;
 
-        return newPopulation;
+        return new ArrayList(newPopulation);
     }
 
     final public List<Cell> evolve(int generations) {
 
-        List <Cell> last_population = null;
+        List<Cell> last_population = null;
 
-        for(int i = 1; i <= generations; i++) {
+        for (int i = 1; i <= generations; i++) {
             last_population = evolve();
         }
 
@@ -120,9 +107,10 @@ public class GA {
 
     public Cell getFittest() {
 
-        Collections.sort(population);
+        List<Cell> temp = new ArrayList(population);
+        Collections.sort(temp);
 
-        return population.get(0);
+        return temp.get(0);
     }
 
     final public int getTotalPopulation() {
@@ -165,8 +153,14 @@ public class GA {
         return target;
     }
 
-    public static int getRandomInt(int min, int max) {
+    public static int getRandomNumber(int min, int max) {
 
         return ThreadLocalRandom.current().nextInt(min, max + 1);
     }
+
+    public static float getRandomNumber(float min, float max) {
+
+        return min + ((float) Math.random()) * (max - min);
+    }
+
 }

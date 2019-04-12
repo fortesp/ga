@@ -3,7 +3,7 @@ package ga;
 public class Cell implements Comparable<Cell> {
 
     private float[] genes;
-    private float fitness = 0f;
+    private float fitness;
 
     public Cell(int length) {
 
