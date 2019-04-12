@@ -1,4 +1,4 @@
-# GA 
+# Genetic Algorithm (GA) 
 
 ## Example:
 
